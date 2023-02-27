@@ -5,35 +5,32 @@ from joblib import load
 model = load('./modelos/model_lung.joblib')
 
 def predictor(request):
+    if request.method == 'POST':
+        genero = request.POST['genero']
+        idade = request.POST['idade']
+        fumante = request.POST['fumante']
+        dedos_amarelos = request.POST['dedos_amarelos']
+        ansiedade = request.POST['ansiedade']
+        pressao = request.POST['pressao']
+        doencas_cronicas = request.POST['doencas_cronicas']
+        fadiga = request.POST['fadiga']
+        alergia = request.POST['alergia']
+        chiado = request.POST['chiado']
+        alcool= request.POST['alcool']
+        tosse = request.POST['tosse']
+        falta_ar = request.POST['falta_ar']
+        engolir = request.POST['engolir']
+        dor_peito = request.POST['dor_peito']
+
+        y_predict = model.predict([[genero, idade, fumante, dedos_amarelos, ansiedade, pressao, doencas_cronicas, fadiga, alergia, chiado, alcool, tosse, falta_ar, engolir, dor_peito]])
+        
+        if y_predict[0] == 2:
+            y_predict = 'Baseado em suas informações, há 97.5% de possibilidade de você contrair câncer de pulmão!'
+        elif y_predict[0] == 1: 
+            y_predict = 'Baseado em suas informações, há 97.5% de possibilidade de você NÃO contrair câncer de pulmão!'
+        print(y_predict)
+        
+        return render(request, 'main.html', {'result': y_predict})
+
     return render(request, 'main.html')
 
-def formInfo(request):
-    genero = request.GET['genero']
-    idade = request.GET['idade']
-    fumante = request.GET['fumante']
-    dedos_amarelos = request.GET['dedos_amarelos']
-    ansiedade = request.GET['ansiedade']
-    pressao = request.GET['pressao']
-    doencas_cronicas = request.GET['doencas_cronicas']
-    fadiga = request.GET['fadiga']
-    alergia = request.GET['alergia']
-    chiado = request.GET['chiado']
-    alcool= request.GET['alcool']
-    tosse = request.GET['tosse']
-    falta_ar = request.GET['falta_ar']
-    engolir = request.GET['engolir']
-    dor_peito = request.GET['dor_peito']
-
-    y_predict = model.predict([[genero, idade, fumante, dedos_amarelos, ansiedade, pressao, doencas_cronicas, fadiga, alergia, chiado, alcool, tosse, falta_ar, engolir, dor_peito]])
-    
-    print(y_predict)
-    print(type(y_predict[0]))
-    
-    if y_predict[0] == 2:
-        y_predict = 'Baseado em suas informações, há 97.5% de possibilidade de você contrair câncer de pulmão!'
-    elif y_predict[0] == 1: 
-        y_predict = 'Baseado em suas informações, há 97.5% de possibilidade de você NÃO contrair câncer de pulmão!'
-    print(y_predict)
-    
-
-    return render(request, 'result.html', {'result': y_predict})

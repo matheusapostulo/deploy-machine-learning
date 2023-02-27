@@ -9,7 +9,8 @@
 <body>
     <h1>Health Learning</h1>
     <hr>
-    <form action="result">
+    <form action="" method="POST">
+        {% csrf_token %}
         Genero: <input type="number" name="genero" required> <br>
         Idade: <input type="number" name="idade" required> <br>
         Fumante: <input type="number" name="fumante" required> <br>
@@ -26,7 +27,10 @@
         Dificuldade de engolir: <input type="number" name="engolir" required> <br>
         Dor no Peito: <input type="number" name="dor_peito" required> <br>
         <input type="submit">
-
     </form>
+    <hr>
+    {% if result %}
+        <h1>{{result }}</h1>
+    {% endif %}
 </body>
 </html>
